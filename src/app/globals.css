@@ -1,0 +1,357 @@
+:root {
+  --bg: #f7f6f2;
+  --ink: #171717;
+  --muted: #62645d;
+  --line: #d9d6cb;
+  --panel: #ffffff;
+  --green: #0f7a4f;
+  --red: #b3261e;
+  --gold: #bd8b13;
+  --blue: #2459a8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+main {
+  min-height: 100vh;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 32px;
+  align-items: end;
+  padding: 48px;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(120deg, rgba(15, 122, 79, 0.18), transparent 42%),
+    linear-gradient(250deg, rgba(36, 89, 168, 0.18), transparent 46%),
+    var(--bg);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  max-width: 920px;
+  font-size: clamp(48px, 8vw, 112px);
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+h2 {
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+.lead {
+  max-width: 720px;
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.eyebrow {
+  margin-bottom: 12px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.statusPanel,
+.panel,
+.service,
+.risk {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.statusPanel {
+  padding: 20px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.status.ok {
+  background: var(--green);
+}
+
+.status.danger {
+  background: var(--red);
+}
+
+dl {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 0;
+}
+
+dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+dt {
+  color: var(--muted);
+}
+
+dd {
+  margin: 0;
+  font-weight: 800;
+}
+
+.setupError {
+  margin-top: 16px;
+  color: var(--red);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding: 24px 48px 48px;
+}
+
+.panel {
+  padding: 20px;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+code {
+  overflow-wrap: anywhere;
+  color: var(--gold);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+}
+
+.serviceList,
+.riskList {
+  display: grid;
+  gap: 12px;
+}
+
+.service {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px 180px;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+}
+
+.service p,
+.muted,
+.risk p {
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.price {
+  text-align: right;
+}
+
+.price strong {
+  display: block;
+  font-size: 26px;
+}
+
+.price span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.methodList {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.methodList li {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+}
+
+.opsConsole {
+  display: grid;
+  gap: 18px;
+}
+
+.opsGrid,
+.payloadGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.payloadGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  padding: 0 12px;
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  min-height: 40px;
+  border: 1px solid #0d5138;
+  border-radius: 8px;
+  background: var(--green);
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  padding: 0 14px;
+}
+
+button:hover {
+  background: #0b5f3d;
+}
+
+pre {
+  min-height: 120px;
+  max-height: 320px;
+  overflow: auto;
+  margin: 10px 0 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #111;
+  color: #f4f4f1;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.resultPanel {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.walletRail {
+  display: grid;
+  gap: 16px;
+}
+
+.walletMount {
+  min-height: 44px;
+  display: grid;
+  align-items: center;
+  gap: 8px;
+}
+
+.risk {
+  display: grid;
+  grid-template-columns: 180px 80px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+}
+
+.risk span {
+  color: var(--red);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.risk p {
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .hero,
+  .grid {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+
+  .service,
+  .risk,
+  .opsGrid,
+  .payloadGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .price {
+    text-align: left;
+  }
+
+  .panelHeader {
+    display: grid;
+  }
+}
