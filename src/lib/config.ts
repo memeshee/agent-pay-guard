@@ -1,7 +1,6 @@
 import type { CasperNetwork } from "./types";
 
 export type AppConfig = {
-  adminToken?: string;
   merchantPublicKey?: string;
   network: CasperNetwork;
   x402ChainId: string;
@@ -21,7 +20,6 @@ export function getConfig(): AppConfig {
   const network = process.env.CASPER_NETWORK === "mainnet" ? "mainnet" : "testnet";
 
   return {
-    adminToken: process.env.ADMIN_TOKEN,
     merchantPublicKey: process.env.PAYEE_ADDRESS ?? process.env.MERCHANT_PUBLIC_KEY,
     network,
     x402ChainId: process.env.CASPER_X402_CHAIN_ID ?? (network === "mainnet" ? "casper:casper" : "casper:casper-test"),

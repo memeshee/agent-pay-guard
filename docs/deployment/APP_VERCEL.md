@@ -38,7 +38,6 @@ pnpm build
 Set these in Vercel Project Settings:
 
 ```bash
-ADMIN_TOKEN=<long_random_value>
 PAYEE_ADDRESS=00<64_hex_account_hash>
 CASPER_NETWORK=testnet
 CASPER_X402_CHAIN_ID=casper:casper-test
@@ -51,6 +50,8 @@ CSPR_CLOUD_BASE_URL=https://api.testnet.cspr.cloud
 CSPR_CLOUD_TOKEN=<cspr_cloud_access_token>
 CSPR_CLICK_APP_KEY=<32_char_cspr_click_app_key>
 ```
+
+Admin routes are intentionally open for the buildathon demo. Add auth before production use.
 
 Optional:
 

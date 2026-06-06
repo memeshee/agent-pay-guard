@@ -18,7 +18,6 @@ The app does not trust:
 
 Server-only:
 
-- `ADMIN_TOKEN`
 - `CSPR_CLOUD_TOKEN`
 - `CASPER_X402_FACILITATOR_API_KEY`
 
@@ -33,6 +32,17 @@ Never store:
 - Wallet private keys
 - Seed phrases
 - PEM private keys
+
+## Demo Admin Mode
+
+For buildathon demo speed, `/api/admin/policies` and `/api/admin/services` are not protected by an admin token. This lets judges create spend policies directly from the dashboard.
+
+Production hardening must add:
+
+- Auth for admin routes
+- Rate limits
+- Audit logs
+- Durable policy storage with ownership checks
 - Agent signing keys
 
 ## x402 Controls

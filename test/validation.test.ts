@@ -49,4 +49,30 @@ describe("validation", () => {
 
     expect(result.ok).toBe(false);
   });
+
+  it("normalizes account-hash-prefixed policy account hashes", () => {
+    const result = parsePolicyInput({
+      agentAccountHash: `account-hash-${"1".repeat(64)}`,
+      allowedServiceSlugs: ["market-snapshot"],
+      perRequestCap: 750000000,
+      dailyCap: 3750000000,
+      expiresAt: "2026-07-01T00:00:00.000Z",
+    });
+
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.data.agentPublicKey).toBe(`00${"1".repeat(64)}`);
+  });
+
+  it("normalizes bare CSPR.live account hashes", () => {
+    const result = parsePolicyInput({
+      agentAccountHash: "2".repeat(64),
+      allowedServiceSlugs: ["market-snapshot"],
+      perRequestCap: 750000000,
+      dailyCap: 3750000000,
+      expiresAt: "2026-07-01T00:00:00.000Z",
+    });
+
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.data.agentPublicKey).toBe(`00${"2".repeat(64)}`);
+  });
 });

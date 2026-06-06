@@ -121,7 +121,7 @@ The MVP uses `data/ledger.json`, ignored by git. This can be moved to SQLite/Pos
 ## Production Upgrade Path
 
 - Replace file ledger with SQLite/Postgres.
-- Add user/admin auth instead of static bearer admin token.
+- Add user/admin auth for policy and service admin routes.
 - Add rate limits on gateway and admin routes.
 - Add structured logs and deploy-hash monitoring.
 - Add a real agent signer package or MCP client example.

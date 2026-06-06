@@ -1,5 +1,6 @@
 import { getConfig } from "@/lib/config";
 import { readLedger } from "@/lib/ledger";
+import { normalizeAccountHash } from "@/lib/validation";
 import { buildPaymentRequirements } from "@/lib/x402-casper";
 
 type RpcRequest = {
@@ -34,12 +35,12 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   if (rpc.method === "get_spend_status") {
-    const publicKey = typeof rpc.params?.agentPublicKey === "string" ? rpc.params.agentPublicKey : "";
-    const receipts = state.receipts.filter((receipt) => receipt.payerPublicKey === publicKey);
+    const agentAccountHash = normalizeAccountHash(rpc.params?.agentAccountHash ?? rpc.params?.agentPublicKey) ?? "";
+    const receipts = state.receipts.filter((receipt) => receipt.payerPublicKey === agentAccountHash);
     return rpcResult(rpc.id, {
       receipts: receipts.length,
       totalSpend: receipts.reduce((sum, receipt) => sum + receipt.amount, 0),
-      policies: state.policies.filter((policy) => policy.agentPublicKey === publicKey),
+      policies: state.policies.filter((policy) => policy.agentPublicKey === agentAccountHash),
     });
   }
 

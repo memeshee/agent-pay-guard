@@ -16,7 +16,6 @@ const defaultAgentKey = "agent_public_key_12345678901234567890123456789012";
 const defaultAccountHash = "00" + "0".repeat(64);
 
 export function OpsConsole({ services }: OpsConsoleProps) {
-  const [adminToken, setAdminToken] = useState("");
   const [agentPublicKey, setAgentPublicKey] = useState(defaultAgentKey);
   const [agentAccountHash, setAgentAccountHash] = useState(defaultAccountHash);
   const [serviceSlug, setServiceSlug] = useState(services[0]?.slug ?? "");
@@ -56,11 +55,10 @@ export function OpsConsole({ services }: OpsConsoleProps) {
     const response = await fetch("/api/admin/policies", {
       method: "POST",
       headers: {
-        authorization: `Bearer ${adminToken}`,
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        agentPublicKey: agentAccountHash,
+        agentAccountHash,
         allowedServiceSlugs: [selected.slug],
         perRequestCap: Math.round(selected.price * 1_000_000_000),
         dailyCap: Math.round(selected.price * 1_000_000_000 * 5),
@@ -103,21 +101,16 @@ export function OpsConsole({ services }: OpsConsoleProps) {
 
       <div className="opsGrid">
         <label>
-          <span>Admin token</span>
-          <input
-            value={adminToken}
-            onChange={(event) => setAdminToken(event.target.value)}
-            placeholder="ADMIN_TOKEN"
-            type="password"
-          />
-        </label>
-        <label>
           <span>Agent public key</span>
           <input value={agentPublicKey} onChange={(event) => setAgentPublicKey(event.target.value)} />
         </label>
         <label>
           <span>Agent account hash</span>
-          <input value={agentAccountHash} onChange={(event) => setAgentAccountHash(event.target.value)} />
+          <input
+            value={agentAccountHash}
+            onChange={(event) => setAgentAccountHash(event.target.value)}
+            placeholder="00... or account-hash-..."
+          />
         </label>
         <label>
           <span>Service</span>

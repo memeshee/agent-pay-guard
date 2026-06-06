@@ -10,6 +10,15 @@ export function isAccountHash(value: unknown): value is string {
   return typeof value === "string" && /^00[0-9a-fA-F]{64}$/.test(value);
 }
 
+export function normalizeAccountHash(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  if (/^00[0-9a-fA-F]{64}$/.test(trimmed)) return trimmed;
+  if (/^[0-9a-fA-F]{64}$/.test(trimmed)) return `00${trimmed}`;
+  const match = /^account-hash-([0-9a-fA-F]{64})$/.exec(trimmed);
+  return match ? `00${match[1]}` : null;
+}
+
 export function isSlug(value: unknown): value is string {
   return typeof value === "string" && /^[a-z0-9][a-z0-9-]{1,48}$/.test(value);
 }
@@ -83,17 +92,33 @@ export function parsePolicyInput(value: unknown):
     }
   | { ok: false; error: string } {
   const input = value as Record<string, unknown>;
-  if (!isAccountHash(input.agentPublicKey)) return { ok: false, error: "Invalid agent account hash." };
+  const agentAccountHash = normalizeAccountHash(input.agentAccountHash ?? input.agentPublicKey);
+  if (!agentAccountHash) {
+    return {
+      ok: false,
+      error: "Invalid agent account hash. Use 64 hex chars, 00 plus 64 hex chars, or account-hash- plus 64 hex chars.",
+    };
+  }
   if (!Array.isArray(input.allowedServiceSlugs) || input.allowedServiceSlugs.length === 0) {
     return { ok: false, error: "At least one service must be allowed." };
   }
   const slugs = input.allowedServiceSlugs;
   if (!slugs.every(isSlug)) return { ok: false, error: "Invalid allowed service slug." };
-  if (typeof input.perRequestCap !== "number" || input.perRequestCap <= 0 || input.perRequestCap > 1000) {
-    return { ok: false, error: "Invalid per-request cap." };
+  if (
+    typeof input.perRequestCap !== "number" ||
+    !Number.isInteger(input.perRequestCap) ||
+    input.perRequestCap <= 0 ||
+    input.perRequestCap > 1_000_000_000_000
+  ) {
+    return { ok: false, error: "Invalid per-request cap. Use atomic units; max is 1000 tokens with 9 decimals." };
   }
-  if (typeof input.dailyCap !== "number" || input.dailyCap <= 0 || input.dailyCap > 10000) {
-    return { ok: false, error: "Invalid daily cap." };
+  if (
+    typeof input.dailyCap !== "number" ||
+    !Number.isInteger(input.dailyCap) ||
+    input.dailyCap <= 0 ||
+    input.dailyCap > 10_000_000_000_000
+  ) {
+    return { ok: false, error: "Invalid daily cap. Use atomic units; max is 10000 tokens with 9 decimals." };
   }
   if (typeof input.expiresAt !== "string" || Number.isNaN(Date.parse(input.expiresAt))) {
     return { ok: false, error: "Invalid expiry." };
@@ -102,7 +127,7 @@ export function parsePolicyInput(value: unknown):
   return {
     ok: true,
     data: {
-      agentPublicKey: input.agentPublicKey,
+      agentPublicKey: agentAccountHash,
       allowedServiceSlugs: Array.from(new Set(slugs)),
       perRequestCap: input.perRequestCap,
       dailyCap: input.dailyCap,

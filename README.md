@@ -169,9 +169,10 @@ The gateway treats payment as a security boundary. It does not trust agent-suppl
 
 Server-side secrets include:
 
-- `ADMIN_TOKEN`
 - `CSPR_CLOUD_TOKEN`
 - `CASPER_X402_FACILITATOR_API_KEY`
+
+For demo speed, policy and service admin routes are open. Do not use that setting for production without adding auth and rate limits.
 
 Private wallet/facilitator keys must never be committed or exposed to the frontend. For the full threat model, see [Security Notes](docs/SECURITY.md).
 
