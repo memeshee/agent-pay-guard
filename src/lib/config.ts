@@ -14,7 +14,7 @@ export type AppConfig = {
   facilitatorApiKey?: string;
   csprCloudBaseUrl?: string;
   csprCloudToken?: string;
-  csprClickAppId?: string;
+  csprClickAppKey?: string;
 };
 
 export function getConfig(): AppConfig {
@@ -34,7 +34,7 @@ export function getConfig(): AppConfig {
     facilitatorApiKey: process.env.CASPER_X402_FACILITATOR_API_KEY,
     csprCloudBaseUrl: process.env.CSPR_CLOUD_BASE_URL,
     csprCloudToken: process.env.CSPR_CLOUD_TOKEN,
-    csprClickAppId: process.env.CSPR_CLICK_APP_ID,
+    csprClickAppKey: process.env.CSPR_CLICK_APP_KEY ?? process.env.CSPR_CLICK_APP_ID,
   };
 }
 

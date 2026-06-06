@@ -36,7 +36,7 @@ CSPR.cloud
 - Service catalog
 - MCP method list
 - Spend policy summary
-- CSPR.click app id status
+- CSPR.click app key status
 - Operations console
 - Risk events
 
@@ -61,7 +61,7 @@ It does not sign payments. Signing belongs to the agent/wallet.
 - CEP-18 package hash
 - Facilitator URL
 - CSPR.cloud server token
-- CSPR.click app id
+- CSPR.click app key
 
 ### x402
 

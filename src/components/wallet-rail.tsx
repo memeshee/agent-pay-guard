@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 
 type WalletRailProps = {
-  appId?: string;
+  appKey?: string;
 };
 
-export function WalletRail({ appId }: WalletRailProps) {
+export function WalletRail({ appKey }: WalletRailProps) {
   const [status, setStatus] = useState("Loading SDK");
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export function WalletRail({ appId }: WalletRailProps) {
       </div>
       <div className="walletMount">
         <span>{status}</span>
-        <code>{appId ? `appId ${appId}` : "CSPR_CLICK_APP_ID missing"}</code>
+        <code>{appKey ? `appKey ${appKey}` : "CSPR_CLICK_APP_KEY missing"}</code>
       </div>
     </div>
   );

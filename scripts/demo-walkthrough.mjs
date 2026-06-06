@@ -3,6 +3,7 @@ import fs from "node:fs";
 const baseUrl = (process.argv[2] ?? process.env.DEMO_BASE_URL ?? "http://127.0.0.1:3000").replace(/\/$/, "");
 const serviceSlug = process.argv[3] ?? "market-snapshot";
 const env = readEnv(".env");
+const csprClickAppKey = env.CSPR_CLICK_APP_KEY ?? env.CSPR_CLICK_APP_ID;
 
 const steps = [
   ["Launch config", verifyConfig],
@@ -36,7 +37,7 @@ console.log("Demo script complete. A real paid call still requires a valid Caspe
 
 async function verifyConfig() {
   const required = {
-    CSPR_CLICK_APP_ID: /^[0-9a-f]{32}$/.test(env.CSPR_CLICK_APP_ID ?? ""),
+    CSPR_CLICK_APP_KEY: /^[0-9a-f]{32}$/.test(csprClickAppKey ?? ""),
     CSPR_CLOUD_BASE_URL: Boolean(env.CSPR_CLOUD_BASE_URL),
     CSPR_CLOUD_TOKEN: Boolean(env.CSPR_CLOUD_TOKEN),
     CASPER_X402_FACILITATOR_URL: Boolean(env.CASPER_X402_FACILITATOR_URL),
@@ -50,7 +51,7 @@ async function verifyConfig() {
   return {
     network: env.CASPER_X402_CHAIN_ID ?? "casper:casper-test",
     payeeAddress: maskMiddle(env.PAYEE_ADDRESS ?? env.MERCHANT_PUBLIC_KEY ?? ""),
-    csprClickAppId: env.CSPR_CLICK_APP_ID,
+    csprClickAppKey,
   };
 }
 

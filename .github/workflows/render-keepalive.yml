@@ -1,0 +1,37 @@
+name: Render facilitator keepalive
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"
+
+concurrency:
+  group: render-facilitator-keepalive
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    env:
+      RENDER_FACILITATOR_URL: ${{ vars.RENDER_FACILITATOR_URL || secrets.RENDER_FACILITATOR_URL }}
+      RENDER_FACILITATOR_API_KEY: ${{ secrets.RENDER_FACILITATOR_API_KEY }}
+    steps:
+      - name: Validate configuration
+        run: |
+          if [ -z "$RENDER_FACILITATOR_URL" ]; then
+            echo "Set RENDER_FACILITATOR_URL as a repository variable or secret."
+            exit 1
+          fi
+
+      - name: Ping /supported
+        run: |
+          url="${RENDER_FACILITATOR_URL%/}/supported"
+          args=(-fsS --retry 3 --retry-delay 10 --max-time 30 "$url")
+          if [ -n "$RENDER_FACILITATOR_API_KEY" ]; then
+            args=(-H "Authorization: $RENDER_FACILITATOR_API_KEY" "${args[@]}")
+          fi
+
+          curl "${args[@]}" | tee supported.json
+          grep -Eq '"x402Version"[[:space:]]*:[[:space:]]*2' supported.json
+          grep -Eq '"scheme"[[:space:]]*:[[:space:]]*"exact"' supported.json
+          grep -Eq '"network"[[:space:]]*:[[:space:]]*"casper:casper-test"' supported.json

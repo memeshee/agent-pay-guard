@@ -24,7 +24,7 @@ Server-only:
 
 Public:
 
-- `CSPR_CLICK_APP_ID`
+- `CSPR_CLICK_APP_KEY`
 - `PAYEE_ADDRESS`
 - `CASPER_X402_ASSET_PACKAGE`
 

@@ -2,7 +2,11 @@ import fs from "node:fs";
 
 const env = readEnv(".env");
 const checks = [
-  ["CSPR_CLICK_APP_ID", /^[0-9a-f]{32}$/.test(env.CSPR_CLICK_APP_ID ?? ""), "32-char lowercase hex CSPR.click app id"],
+  [
+    "CSPR_CLICK_APP_KEY",
+    /^[0-9a-f]{32}$/.test(env.CSPR_CLICK_APP_KEY ?? env.CSPR_CLICK_APP_ID ?? ""),
+    "32-char lowercase hex CSPR.click app key",
+  ],
   ["CSPR_CLOUD_BASE_URL", /^https:\/\/api(\.testnet)?\.cspr\.cloud$/.test(env.CSPR_CLOUD_BASE_URL ?? ""), "CSPR.cloud REST base URL"],
   ["CSPR_CLOUD_TOKEN", Boolean(env.CSPR_CLOUD_TOKEN), "CSPR.cloud token"],
   ["CASPER_X402_FACILITATOR_URL", Boolean(env.CASPER_X402_FACILITATOR_URL), "Casper x402 facilitator URL"],

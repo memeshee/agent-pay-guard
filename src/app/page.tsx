@@ -89,7 +89,7 @@ export default async function Home() {
         </div>
 
         <div className="panel">
-          <WalletRail appId={config.csprClickAppId} />
+          <WalletRail appKey={config.csprClickAppKey} />
         </div>
 
         <div className="panel wide">
