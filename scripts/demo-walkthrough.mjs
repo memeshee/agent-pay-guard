@@ -1,6 +1,6 @@
 import fs from "node:fs";
 
-const baseUrl = process.argv[2] ?? process.env.DEMO_BASE_URL ?? "http://127.0.0.1:3000";
+const baseUrl = (process.argv[2] ?? process.env.DEMO_BASE_URL ?? "http://127.0.0.1:3000").replace(/\/$/, "");
 const serviceSlug = process.argv[3] ?? "market-snapshot";
 const env = readEnv(".env");
 
@@ -17,6 +17,8 @@ const steps = [
 
 console.log(`AgentPay Guard demo against ${baseUrl}`);
 console.log(`Service: ${serviceSlug}\n`);
+
+await warnIfBaseUrlLooksLikeFacilitator();
 
 for (const [name, fn] of steps) {
   try {
@@ -54,7 +56,11 @@ async function verifyConfig() {
 
 async function checkHome() {
   const response = await fetch(baseUrl);
-  if (!response.ok) throw new Error(`Expected homepage 200, got ${response.status}`);
+  if (!response.ok) {
+    throw new Error(
+      `Expected homepage 200, got ${response.status}. If this URL is the x402 facilitator, run demo against the Next.js app URL instead.`,
+    );
+  }
   return `homepage ${response.status}`;
 }
 
@@ -82,7 +88,7 @@ async function mcpQuote() {
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ jsonrpc: "2.0", id: "demo-quote", method: "quote_service", params: { serviceSlug } }),
   });
-  const body = await response.json();
+  const body = await readJsonResponse(response, `${baseUrl}/api/mcp`);
   if (!response.ok) throw new Error(JSON.stringify(body));
   return {
     method: "quote_service",
@@ -93,7 +99,7 @@ async function mcpQuote() {
 
 async function unpaidGateway() {
   const response = await fetch(`${baseUrl}/api/gateway/${serviceSlug}`);
-  const body = await response.json();
+  const body = await readJsonResponse(response, `${baseUrl}/api/gateway/${serviceSlug}`);
   if (response.status !== 402) throw new Error(`Expected 402, got ${response.status}: ${JSON.stringify(body)}`);
   return {
     status: response.status,
@@ -130,9 +136,34 @@ async function payeeBalance() {
 
 async function getJson(url) {
   const response = await fetch(url);
-  const body = await response.json();
+  const body = await readJsonResponse(response, url);
   if (!response.ok) throw new Error(`${url} returned ${response.status}: ${JSON.stringify(body)}`);
   return body;
+}
+
+async function readJsonResponse(response, url) {
+  const contentType = response.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    const text = await response.text();
+    throw new Error(
+      `${url} returned ${response.status} ${contentType || "unknown content-type"}: ${text.slice(0, 120)}`,
+    );
+  }
+  return response.json();
+}
+
+async function warnIfBaseUrlLooksLikeFacilitator() {
+  try {
+    const response = await fetch(`${baseUrl.replace(/\/$/, "")}/supported`);
+    if (!response.ok) return;
+    const body = await response.json().catch(() => null);
+    if (Array.isArray(body?.kinds)) {
+      console.log("WARN Base URL looks like a Casper x402 facilitator, not the AgentPay Guard app.");
+      console.log(indent("Use this URL for CASPER_X402_FACILITATOR_URL, then run demo against your Vercel/Next.js app URL.\n"));
+    }
+  } catch {
+    // Best-effort hint only.
+  }
 }
 
 function readEnv(path) {

@@ -3,7 +3,9 @@ import path from "node:path";
 import { id, nowIso } from "./ids";
 import type { AgentPolicy, LedgerState, PaymentReceipt, RiskEvent, Service } from "./types";
 
-const ledgerPath = path.join(process.cwd(), "data", "ledger.json");
+const ledgerPath =
+  process.env.LEDGER_PATH ??
+  (process.env.VERCEL ? path.join("/tmp", "agentpay-guard-ledger.json") : path.join(process.cwd(), "data", "ledger.json"));
 
 const seedServices: Service[] = [
   {
