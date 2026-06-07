@@ -13,22 +13,16 @@
     "demo": "node scripts/demo-walkthrough.mjs"
   },
   "dependencies": {
-    "@make-software/csprclick-ui": "^1.0.0",
     "casper-js-sdk": "^5.0.12",
     "next": "^15.3.3",
     "react": "^18.3.1",
-    "react-country-flag": "^3.1.0",
-    "react-dom": "^18.3.1",
-    "react-modal": "^3.16.1",
-    "styled-components": "^5.3.11"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.0",
     "@types/node": "^22.15.29",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
-    "@types/react-modal": "^3.16.3",
-    "@types/styled-components": "^5.1.35",
     "jsdom": "^26.1.0",
     "typescript": "^5.8.3",
     "vitest": "^3.2.1"
